@@ -1,11 +1,7 @@
 const { Pool } = require("pg");
-require("dotenv").config();
 
 const pool = new Pool({
-  host: "localhost",
-  user: "nabil",
-  password: "ba062358",
-  database: "pfe_sdm",
+  connectionString: "postgresql://postgres:password@db:5432/mydb",
 });
 pool
   .query("SELECT current_database(), current_schema();")

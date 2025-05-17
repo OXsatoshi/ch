@@ -2,8 +2,29 @@ const db = require("../db/db.js"); // Import the db configuration
 module.exports = {
   // Get all citoyens
   getAllCitoyens: async (req, res) => {
+    const citoyeQuery = `
+SELECT 
+  c.id AS citoyen_id,
+  c.nom,
+  c.prenom,
+  c.address,
+  c.birthdate,
+  a.nom AS arme,
+  g.fr_label AS grade,
+  f.name AS fonction,
+  s.name AS specialite,
+  sf.is_married AS situation_familiale,
+  c.is_validated
+FROM 
+  citoyen c
+LEFT JOIN arme a ON c.arme_id = a.id
+LEFT JOIN grade g ON c.grade_id = g.id
+LEFT JOIN fonction f ON c.fonction_id = f.id
+LEFT JOIN specialite s ON c.specialite_id = s.id
+LEFT JOIN situation_familiale sf ON c.situation_familiale_id = sf.id;
+`;
     try {
-      const result = await db.query("SELECT * FROM citoyen");
+      const result = await db.query(citoyeQuery);
       res.json(result.rows);
     } catch (err) {
       console.error(err.message);
